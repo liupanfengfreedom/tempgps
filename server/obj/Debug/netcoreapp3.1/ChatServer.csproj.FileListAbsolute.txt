@@ -1,0 +1,16 @@
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\ChatServer.exe
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\ChatServer.deps.json
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\ChatServer.runtimeconfig.json
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\ChatServer.runtimeconfig.dev.json
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\ChatServer.dll
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\ChatServer.pdb
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\Kcp.dll
+D:\vsprojects\Csharp_kcp-server_client--master\server\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.csprojAssemblyReference.cache
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.AssemblyInfoInputs.cache
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.AssemblyInfo.cs
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.csproj.CoreCompileInputs.cache
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.csproj.CopyComplete
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.dll
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.pdb
+D:\vsprojects\Csharp_kcp-server_client--master\server\obj\Debug\netcoreapp3.1\ChatServer.genruntimeconfig.cache
