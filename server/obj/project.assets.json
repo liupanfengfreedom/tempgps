@@ -119,11 +119,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\vsprojects\\Csharp_kcp-server_client--master\\server\\ChatServer.csproj",
+      "projectUniqueName": "C:\\UEprojects\\gps\\server\\ChatServer.csproj",
       "projectName": "ChatServer",
-      "projectPath": "D:\\vsprojects\\Csharp_kcp-server_client--master\\server\\ChatServer.csproj",
+      "projectPath": "C:\\UEprojects\\gps\\server\\ChatServer.csproj",
       "packagesPath": "C:\\Users\\liupanfeng\\.nuget\\packages\\",
-      "outputPath": "D:\\vsprojects\\Csharp_kcp-server_client--master\\server\\obj\\",
+      "outputPath": "C:\\UEprojects\\gps\\server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

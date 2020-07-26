@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "p5NV1OTz9CFrpD7wzu56KILg9hEJWU6WO+L6Ye+chBGRj+m26w/Kd5Qw5hOAhqidOQ5Byb3hD3k8AOPOnDXbcA==",
+  "dgSpecHash": "8keJLaPfISiPVC0LSyit51lkB1N96jARHOj5Z3hhlYsyx9cjaVA2zQaf+JEfXcR6Rb8tuBLjSKnWMf7Hi7yvdQ==",
   "success": true,
-  "projectFilePath": "D:\\vsprojects\\Csharp_kcp-server_client--master\\server\\ChatServer.csproj",
+  "projectFilePath": "C:\\UEprojects\\gps\\server\\ChatServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\liupanfeng\\.nuget\\packages\\kcp\\2.0.0\\kcp.2.0.0.nupkg.sha512",
     "C:\\Users\\liupanfeng\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",

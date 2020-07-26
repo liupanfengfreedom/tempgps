@@ -33,6 +33,8 @@ namespace ChatServer
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine(str);
+                Console.WriteLine(latitude.ToString());
+                Console.WriteLine(longitude.ToString());
                 Console.ForegroundColor = ConsoleColor.White;
                 userlevelsend(ref buffer);
             };
