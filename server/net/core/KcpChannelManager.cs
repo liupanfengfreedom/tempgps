@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 namespace ChatServer
@@ -113,6 +114,7 @@ namespace ChatServer
         {
             channelid = channelidp;
             mkcpclient = kcpclientp;
+            SetTimer();
         }
         public void Onreceivedata(ref byte[] buffer)
         {
@@ -164,10 +166,11 @@ namespace ChatServer
             { 
 
             }
-   
 
+            timercounter=0;
 
         }
+        
         public void send(ref byte[] buffer)
         {
             byte[] databuffer = new byte[idlength+buffer.Length];
@@ -192,6 +195,27 @@ namespace ChatServer
 #endif
             byte[] strbuffe = asen.GetBytes(str);
             send(ref strbuffe);
+        }
+        private System.Timers.Timer aTimer;
+        private int timercounter = 0;
+        private void SetTimer()
+        {
+            // Create a timer with a two second interval.
+            aTimer = new System.Timers.Timer(1000);
+            // Hook up the Elapsed event for the timer. 
+            aTimer.Elapsed += (Object source, ElapsedEventArgs e) => {
+                if (timercounter++ > 10)
+                {
+                    position p1 = new position(currentposition.latitude / 1000, currentposition.longitude / 1000);
+                    bool bcontain1 = virtualworld.Cells.ContainsKey(p1);
+                    if (bcontain1)
+                    {
+                        virtualworld.Cells[p1]?.Remove(this);//remove from last cell
+                    }
+                }
+            };
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
         }
     }
 }
