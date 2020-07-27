@@ -72,6 +72,8 @@ void KcpChannel::send(const uint8* content, const int32& size)
 }
 void KcpChannel::send(FString& serialized)
 {
-	FString temp = channelid+ serialized;
-	kcpchannelmanager->mkcpclient->kcpsend(temp);
+	FString temp = serialized;
+	TCHAR* arr = temp.GetCharArray().GetData();
+	int sendlength = FCString::Strlen(arr);
+	send((uint8*)TCHAR_TO_UTF8(arr), sendlength);
 }

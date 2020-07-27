@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 namespace ChatServer
 {
     class KcpChannelManager
@@ -30,7 +31,12 @@ namespace ChatServer
 #else
             var idstr = System.Text.Encoding.UTF8.GetString(buffer);
 #endif
-            send(ref buffer);
+            JObject jObject = new JObject();
+            jObject.Add("Command", 1);
+            jObject.Add("channelid", "1122233445566");
+            jObject.Add("latitude", 30.5531);
+            jObject.Add("longitude", 119.2634);
+            send(jObject.ToString());
         }
         public void send(ref byte[] buffer)
         {
@@ -49,7 +55,13 @@ namespace ChatServer
         }
         public void send(String str)
         {
-            //mkcpclient.userlevelsend(ref buffer);
+#if UTF16
+            UnicodeEncoding asen = new UnicodeEncoding();
+#else
+            ASCIIEncoding asen = new ASCIIEncoding();
+#endif
+            byte[] strbuffe = asen.GetBytes(str);
+            send(ref strbuffe);
         }
     }
 }

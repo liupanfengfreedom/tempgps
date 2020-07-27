@@ -5,7 +5,33 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GpskcpActor.generated.h"
-
+//Use USTRUCT(BlueprintType) if you would like to include your Struct in Blueprints
+UENUM()
+enum class Command : uint8
+{
+	none=0 ,
+	Spawnnewplayer,
+};
+USTRUCT()
+struct FWorldCommand
+{
+	GENERATED_BODY()
+		// Use UPROPERTY() to decorate member variables as they allow for easier integration with network replication as well as potential garbage collection processing
+		UPROPERTY()
+		Command commandtype;
+	UPROPERTY()
+	FString payload;
+	//UPROPERTY()
+	//	float latitude;
+	//UPROPERTY()
+	//	float longitude;
+	//UPROPERTY()
+	//	FString channelid;
+	FWorldCommand()
+	{
+	  
+	}
+};
 UCLASS()
 class KCPGPSAPP_API AGpskcpActor : public AActor
 {
