@@ -40,6 +40,7 @@ namespace ChatServer
         public KcpClient mkcpclient;
         position currentposition;
         position[] potentialsynccell = new position[9];
+        HashSet<KcpChannel> lastpeopleatrange = new HashSet<KcpChannel>();
         void fleshpotentialsyncell()
         {
             potentialsynccell[0].latitude = currentposition.latitude/1000 + 1;//up
@@ -71,7 +72,6 @@ namespace ChatServer
         }
         HashSet<KcpChannel> findallpeopelatrange(int radius)
         {
-            HashSet<KcpChannel> peopleatrange = new HashSet<KcpChannel>();
             for (int i = 0; i < potentialsynccell.Length;i++)
             {
                 bool b = virtualworld.Cells.ContainsKey(potentialsynccell[i]);
@@ -89,13 +89,26 @@ namespace ChatServer
                         int delta_longitude = p.currentposition.longitude - currentposition.longitude;
                         int square = (delta_latitude * delta_latitude) + (delta_longitude * delta_longitude);
                         if ( square < radius* radius )
-                        { 
-                           peopleatrange.Add(p);
+                        {
+                            if (lastpeopleatrange.Contains(p))
+                            {
+
+                            }
+                            else
+                            {
+                                lastpeopleatrange.Add(p);//new player
+                                JObject jObject = new JObject();
+                                jObject.Add("Command", 1);
+                                jObject.Add("channelid", p.channelid);
+                                jObject.Add("latitude", p.currentposition.latitude);
+                                jObject.Add("longitude", p.currentposition.longitude);
+                                send(jObject.ToString(), channelid);
+                            }
                         }
                     }
                 }
             }
-            return peopleatrange;
+            return lastpeopleatrange;
         }
         void sentpeopleatrangetome()
         {
@@ -103,11 +116,10 @@ namespace ChatServer
             foreach (var p in peopleatrange)
             {
                 JObject jObject = new JObject();
-                jObject.Add("Command", 1);
-                jObject.Add("channelid", p.channelid);
+                jObject.Add("Command", 2);
                 jObject.Add("latitude", p.currentposition.latitude);
                 jObject.Add("longitude", p.currentposition.longitude);
-                send(jObject.ToString());
+                send(jObject.ToString(), p.channelid);
             }
         }
         public KcpChannel(String channelidp, KcpClient kcpclientp )
@@ -171,7 +183,7 @@ namespace ChatServer
 
         }
         
-        public void send(ref byte[] buffer)
+        public void send(ref byte[] buffer,String channelidp)
         {
             byte[] databuffer = new byte[idlength+buffer.Length];
 #if UTF16
@@ -179,14 +191,14 @@ namespace ChatServer
 #else
             ASCIIEncoding asen = new ASCIIEncoding();
 #endif
-            byte[] idbuffe = asen.GetBytes(channelid);
+            byte[] idbuffe = asen.GetBytes(channelidp);
 
             Array.ConstrainedCopy(idbuffe, 0, databuffer, 0, idlength);
             Array.ConstrainedCopy(buffer, 0, databuffer, idlength, buffer.Length);
 
             mkcpclient.userlevelsend(ref databuffer);
         }
-        public void send(String str)
+        public void send(String str, String channelidp)
         {
 #if UTF16
             UnicodeEncoding asen = new UnicodeEncoding();
@@ -194,7 +206,7 @@ namespace ChatServer
             ASCIIEncoding asen = new ASCIIEncoding();
 #endif
             byte[] strbuffe = asen.GetBytes(str);
-            send(ref strbuffe);
+            send(ref strbuffe, channelidp);
         }
         private System.Timers.Timer aTimer;
         private int timercounter = 0;
