@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class kcpGPSAPP : ModuleRules
+public class MessageMiddleware : ModuleRules
 {
-	public kcpGPSAPP(ReadOnlyTargetRules Target) : base(Target)
+	public MessageMiddleware(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -38,12 +38,6 @@ public class kcpGPSAPP : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"kcp",
-				"MobileUtils",
-				"KCPUL",
-				"Json",
-				"JsonUtilities",
-				"MessageMiddleware",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

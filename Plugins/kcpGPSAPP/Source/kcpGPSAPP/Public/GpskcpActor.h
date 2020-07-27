@@ -42,6 +42,8 @@ class KCPGPSAPP_API AGpskcpActor : public AActor
 	void timerworker();
 	TArray<uint8> realdata;
 	TSharedPtr<class KcpChannel, ESPMode::ThreadSafe>mkcpchannel;
+	float latitude = 30.2345;
+	float longitude = 119.87655;
 public:	
 	// Sets default values for this actor's properties
 	AGpskcpActor();

@@ -70,8 +70,8 @@ void Kcpclient::setserveraddress(FString ipaddress, int32 port)
 	onrawsendevent.BindLambda([=](const char* buf, int len, struct IKCPCB* kcp, void* user) {
 		int32 BytesSent = 0;
 		bool bs = SenderSocket->SendTo((const uint8*)buf, len, BytesSent, *RemoteAddr);
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("SenderSocket->SendTo"));
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow,FString::FromInt(len));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, TEXT("SenderSocket->SendTo"));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow,FString::FromInt(len));
 
 		});
 }

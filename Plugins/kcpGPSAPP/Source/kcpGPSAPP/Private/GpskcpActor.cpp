@@ -8,6 +8,8 @@
 #include "KcpChannelManager.h"
 #include "JsonUtilities.h"
 #include "Json.h"
+#include "MessageManager.h"
+
 // Sets default values
 AGpskcpActor::AGpskcpActor()
 {
@@ -22,7 +24,6 @@ AGpskcpActor::~AGpskcpActor()
 	//	delete mkcp;
 	//	mkcp = nullptr;
 	//}
-
 }
 void AGpskcpActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
@@ -30,6 +31,9 @@ void AGpskcpActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	//{
 	//	mkcp->exitthread = true;
 	//}
+	GetWorld()->GetTimerManager().ClearTimer(th);
+	mkcpchannel->exit();
+
 }
 // Called when the game starts or when spawned
 void AGpskcpActor::BeginPlay()
@@ -53,8 +57,11 @@ void AGpskcpActor::BeginPlay()
 	//{
 	//	UMobileUtilsBlueprintLibrary::javafunctionGotoSettinggps();
 	//}
-	
+	int32 id = FMath::Rand();
 	FString androidid = "aassddff1122aaddss"; 
+	androidid = FString::FromInt(id);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "thisid : "+ androidid);
+
 	//androidid = UMobileUtilsBlueprintLibrary::javafunctionAndroidID();
 	mkcpchannel = MakeShareable(new KcpChannel(androidid));
 	mkcpchannel->OnkcpChannelReceivedatadelegate.BindLambda([](const uint8*data, uint32 size) {
@@ -68,11 +75,19 @@ void AGpskcpActor::BeginPlay()
 			FString channelid = jsonobject->GetStringField("channelid");
 			float latitude = jsonobject->GetNumberField("latitude");
 			float longitude = jsonobject->GetNumberField("longitude");
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : "+ "latitude: "+ FString::SanitizeFloat(latitude)+ "longitude: " + FString::SanitizeFloat(longitude));
 			//create player
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, rec);
 	});
 	GetWorld()->GetTimerManager().SetTimer(th, this, &AGpskcpActor::timerworker, 1, true, 1);
+	ADDMESSAGELISTEN(this, "1", [=](const void* p) {
+		     FString str = *(FString*)p;
+			 latitude = FCString::Atof(*str);
+		})
+	ADDMESSAGELISTEN(this, "2", [=](const void* p) {
+			FString str = *(FString*)p;
+			longitude = FCString::Atof(*str);
+		})
 }
 
 // Called every frame
@@ -102,9 +117,10 @@ void AGpskcpActor::timerworker()
 	}
 	TSharedPtr<FJsonObject> newplayerjoin = MakeShareable(new FJsonObject);
 	newplayerjoin->SetNumberField("Command", 1);
-	newplayerjoin->SetNumberField("latitude", 30.2345);
-	newplayerjoin->SetNumberField("longitude",119.87655);
-
+	newplayerjoin->SetNumberField("latitude", latitude);
+	newplayerjoin->SetNumberField("longitude", longitude);
+	//newplayerjoin->SetNumberField("latitude", 30.2345);
+	//newplayerjoin->SetNumberField("longitude", 119.87655);
 	FString OutputString;
 	TSharedRef< TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&OutputString);
 	FJsonSerializer::Serialize(newplayerjoin.ToSharedRef(), Writer);

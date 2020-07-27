@@ -33,20 +33,31 @@ TSharedPtr<KcpChannelManager, ESPMode::ThreadSafe>  KcpChannelManager::Getsingle
 }
 KcpChannelManager::~KcpChannelManager()
 {
+
+}
+void KcpChannelManager::exit()
+{
 	if (mkcpclient)//this seem never be excuted
 	{
 		mkcpclient->exitthread = true;
 	}
 	Async(EAsyncExecution::ThreadPool, [=]() {exitkcpthread(); }, nullptr);
-
 }
 void KcpChannelManager::exitkcpthread()
 {
-	FPlatformProcess::Sleep(0.5);
+
+	FPlatformProcess::Sleep(2);
 	if (mkcpclient)
 	{
 		delete mkcpclient;
 		mkcpclient = nullptr;
+	}
+}
+void KcpChannel::exit()
+{
+	if (kcpchannelmanager)
+	{
+		kcpchannelmanager->exit();
 	}
 }
 KcpChannel::KcpChannel(FString channelidp)

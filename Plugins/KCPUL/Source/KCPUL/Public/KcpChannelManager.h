@@ -14,8 +14,10 @@ class KCPUL_API KcpChannelManager
 	class Kcpclient* mkcpclient;
 	static TSharedPtr<KcpChannelManager, ESPMode::ThreadSafe> _msingleston;
 	TMap<FString, class KcpChannel*> OnchannelReceivedatacallbackmap;
-	void exitkcpthread();
+
 public:
+	void exitkcpthread();
+	void exit();
 	KcpChannelManager();
 	~KcpChannelManager();
 	static TSharedPtr<KcpChannelManager, ESPMode::ThreadSafe> Getsingleston();
@@ -33,5 +35,5 @@ public:
 	FOnKcpChannelReceivedata OnkcpChannelReceivedatadelegate;
 	void send(const uint8* content, const int32& size);
 	void send(FString& serialized);
-
+	void exit();
 };
