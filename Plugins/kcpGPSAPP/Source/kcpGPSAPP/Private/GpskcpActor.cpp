@@ -75,6 +75,8 @@ void AGpskcpActor::BeginPlay()
 			FString channelid = jsonobject->GetStringField("channelid");
 			float latitude = jsonobject->GetNumberField("latitude");
 			float longitude = jsonobject->GetNumberField("longitude");
+
+
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : "+ "latitude: "+ FString::SanitizeFloat(latitude)+ "longitude: " + FString::SanitizeFloat(longitude));
 			//create player
 		}

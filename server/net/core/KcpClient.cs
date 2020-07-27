@@ -26,9 +26,20 @@ namespace ChatServer
                 var idstr = System.Text.Encoding.UTF8.GetString(idbuffer);
 #endif
                 bool bcontain = KcpChannelManager.OnchannelReceivedatacallbackmap.ContainsKey(idstr);
-                if(!bcontain)
+                if (bcontain)
+                {
+                    if (KcpChannelManager.OnchannelReceivedatacallbackmap[idstr].mkcpclient.mremoteEP == mremoteEP)
+                    {
+
+                    }
+                    else
+                    { 
+                      KcpChannelManager.OnchannelReceivedatacallbackmap.Add(idstr, new KcpChannel(idstr, this));//need verify
+                    }
+                }
+                else
                 { 
-                     KcpChannelManager.OnchannelReceivedatacallbackmap.Add(idstr,new KcpChannel(idstr,this));
+                    KcpChannelManager.OnchannelReceivedatacallbackmap.Add(idstr, new KcpChannel(idstr, this));
                 }
                 int datasize = buffer.Length - KcpChannel.idlength;
                 byte[] databuffer = new byte[datasize];

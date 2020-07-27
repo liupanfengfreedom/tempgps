@@ -37,7 +37,7 @@ namespace ChatServer
     {
         public const int idlength = 32;  
         String channelid;
-        KcpClient mkcpclient;
+        public KcpClient mkcpclient;
         position currentposition;
         position[] potentialsynccell = new position[9];
         void fleshpotentialsyncell()
