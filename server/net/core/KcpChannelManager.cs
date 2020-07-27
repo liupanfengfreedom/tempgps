@@ -133,7 +133,6 @@ namespace ChatServer
                     int longitudei = (int)(longitude * 100);
                     position temp = new position(latitudei,longitudei);
 
-                    currentposition = new position((int)(latitude*100000), (int)(longitude*100000));
                     Console.WriteLine("channelid:" + channelid + " latitude: "+ latitude+ " longitude: "+ longitude);
                     bool bcontain = virtualworld.Cells.ContainsKey(temp);
                     if (bcontain)
@@ -143,7 +142,18 @@ namespace ChatServer
                     else
                     {
                         virtualworld.Cells[temp] = new HashSet<KcpChannel>();
+                        if (currentposition.latitude / 1000 != temp.latitude || currentposition.longitude / 1000 != temp.longitude)
+                        {
+                            position p1 = new position(currentposition.latitude / 1000, currentposition.longitude / 1000);
+                            bool bcontain1 = virtualworld.Cells.ContainsKey(p1);
+                            if (bcontain1)
+                            { 
+                                virtualworld.Cells[p1]?.Remove(this);//remove from last cell
+                            }
+                        }
                     }
+                    currentposition = new position((int)(latitude * 100000), (int)(longitude * 100000));
+
                     virtualworld.Cells[temp].Add(this);
                     fleshpotentialsyncell();
                     sentpeopleatrangetome();
