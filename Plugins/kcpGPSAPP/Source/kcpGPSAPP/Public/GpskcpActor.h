@@ -10,10 +10,12 @@ UCLASS()
 class KCPGPSAPP_API AGpskcpActor : public AActor
 {
 	GENERATED_BODY()
-		class Kcpclient* mkcp;
+		TMap<FString, int> OnchannelReceivedatacallbackmap;
+		//class Kcpclient* mkcp;
 	FTimerHandle th;
 	void timerworker();
 	TArray<uint8> realdata;
+	TSharedPtr<class KcpChannel, ESPMode::ThreadSafe>mkcpchannel;
 public:	
 	// Sets default values for this actor's properties
 	AGpskcpActor();

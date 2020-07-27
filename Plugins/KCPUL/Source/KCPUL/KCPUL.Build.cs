@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class kcpGPSAPP : ModuleRules
+public class KCPUL : ModuleRules
 {
-	public kcpGPSAPP(ReadOnlyTargetRules Target) : base(Target)
+	public KCPUL(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -39,8 +39,6 @@ public class kcpGPSAPP : ModuleRules
 				"Slate",
 				"SlateCore",
 				"kcp",
-				"MobileUtils",
-				"KCPUL",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

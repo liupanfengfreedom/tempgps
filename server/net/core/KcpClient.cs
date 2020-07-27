@@ -18,25 +18,38 @@ namespace ChatServer
         {
 #if LOOPBACKTEST
             onUserLevelReceivedCompleted += (ref byte[] buffer) => {
+                byte[] idbuffer = new byte[KcpChannel.idlength];
+                Array.ConstrainedCopy(buffer,0, idbuffer, 0, 32);
 #if UTF16
-            var str = System.Text.Encoding.Unicode.GetString(buffer);
+                var idstr = System.Text.Encoding.Unicode.GetString(idbuffer);
 #else
-                var str = System.Text.Encoding.UTF8.GetString(buffer);
+                var idstr = System.Text.Encoding.UTF8.GetString(idbuffer);
 #endif
-                byte[] latitudebuffer = new byte[4];
-                Array.ConstrainedCopy(buffer, 32, latitudebuffer, 0, 4);
-                float latitude = ByteArraytoChannelidType.DeSerialize(ref latitudebuffer);
+                bool bcontain = KcpChannelManager.OnchannelReceivedatacallbackmap.ContainsKey(idstr);
+                if(!bcontain)
+                { 
+                     KcpChannelManager.OnchannelReceivedatacallbackmap.Add(idstr,new KcpChannel(idstr,this));
+                }
+                int datasize = buffer.Length - KcpChannel.idlength;
+                byte[] databuffer = new byte[datasize];
+                Array.ConstrainedCopy(buffer, KcpChannel.idlength, databuffer, 0, datasize);
+                KcpChannelManager.OnchannelReceivedatacallbackmap[idstr].Onreceivedata(ref databuffer);
 
-                byte[] longitudebuffer = new byte[4];
-                Array.ConstrainedCopy(buffer, 32+4, longitudebuffer, 0, 4);
-                float longitude = ByteArraytoChannelidType.DeSerialize(ref longitudebuffer);
 
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine(str);
-                Console.WriteLine(latitude.ToString());
-                Console.WriteLine(longitude.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
-                userlevelsend(ref buffer);
+                //byte[] latitudebuffer = new byte[4];
+                //Array.ConstrainedCopy(buffer, 32, latitudebuffer, 0, 4);
+                //float latitude = ByteArraytoChannelidType.DeSerialize(ref latitudebuffer);
+
+                //byte[] longitudebuffer = new byte[4];
+                //Array.ConstrainedCopy(buffer, 32+4, longitudebuffer, 0, 4);
+                //float longitude = ByteArraytoChannelidType.DeSerialize(ref longitudebuffer);
+
+                //Console.ForegroundColor = ConsoleColor.Blue;
+                //Console.WriteLine(idstr);
+                //Console.WriteLine(latitude.ToString());
+                //Console.WriteLine(longitude.ToString());
+                //Console.ForegroundColor = ConsoleColor.White;
+                //userlevelsend(ref buffer);
             };
 #endif
             kcphandle handle = new kcphandle();
