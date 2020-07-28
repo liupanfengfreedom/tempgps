@@ -22,20 +22,20 @@ ALocalCharacter::ALocalCharacter()
 void ALocalCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//bool b = UMobileUtilsBlueprintLibrary::javafunctionIsgpsenabled();
-	//if (b)
-	//{
-	//}
-	//else
-	//{
-	//	UMobileUtilsBlueprintLibrary::javafunctionGotoSettinggps();
-	//}
+	bool b = UMobileUtilsBlueprintLibrary::javafunctionIsgpsenabled();
+	if (b)
+	{
+	}
+	else
+	{
+		UMobileUtilsBlueprintLibrary::javafunctionGotoSettinggps();
+	}
 	int32 id = FMath::Rand();
 	FString androidid = "aassddff1122aaddss";
 	androidid = FString::FromInt(id);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "thisid : " + androidid);
 
-	//androidid = UMobileUtilsBlueprintLibrary::javafunctionAndroidID();
+    androidid = UMobileUtilsBlueprintLibrary::javafunctionAndroidID();
 	mkcpchannel = MakeShareable(new KcpChannel(androidid));
 	mkcpchannel->OnkcpChannelReceivedatadelegate.BindLambda([=](const uint8* data, uint32 size) {
 		FString rec = FString(size, (char*)data);
@@ -107,12 +107,12 @@ void ALocalCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void ALocalCharacter::timerworker()
 {
 	
-	//UMobileUtilsBlueprintLibrary::javafunctionGPSInfor(latitude, longitude);
+	UMobileUtilsBlueprintLibrary::javafunctionGPSInfor(latitude, longitude);
 
-	//FString androidid = UMobileUtilsBlueprintLibrary::javafunctionAndroidID();
-	//TCHAR* serializedChar = androidid.GetCharArray().GetData();
-	//int32 size = FCString::Strlen(serializedChar);
-	//int floatsize = sizeof(float);
+	FVector location = GetActorLocation();
+	location.X = (latitude * 100000 - 3029082) * 100;
+	location.Y = (longitude * 100000 - 11999529) * 100;
+	SetActorLocation(location);
 
 	//realdata.SetNum(32+(floatsize*2));
 	//FMemory::Memcpy(realdata.GetData(), (const uint8*)TCHAR_TO_UTF8(serializedChar), size);//here is 2 byte valide data length
