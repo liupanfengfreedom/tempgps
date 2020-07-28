@@ -60,8 +60,8 @@ void ALocalCharacter::BeginPlay()
 					APosCharacter* mcharactor = GetWorld()->SpawnActor<APosCharacter>(Robotclass, Location, Rotation, ActorSpawnParams);
 					mcharactor->SpawnDefaultController();
 					mcharactor->Addkcpchannel(MakeShareable(new KcpChannel(robotchannelid)));
-					GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
-					GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "Location: " + Location.ToString());
+					//GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
+					GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "create new player Location: " + Location.ToString());
 
 				}
 			);
@@ -110,24 +110,25 @@ void ALocalCharacter::timerworker()
 	UMobileUtilsBlueprintLibrary::javafunctionGPSInfor(latitude, longitude);
 
 	FVector location = GetActorLocation();
-	location.X = (latitude * 100000 - 3029082) * 100;
-	location.Y = (longitude * 100000 - 11999529) * 100;
+	location.X = (latitude * 10000000 - 302908200);
+	location.Y = (longitude * 10000000 - 1199952900);
 	SetActorLocation(location);
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
 
 	//realdata.SetNum(32+(floatsize*2));
 	//FMemory::Memcpy(realdata.GetData(), (const uint8*)TCHAR_TO_UTF8(serializedChar), size);//here is 2 byte valide data length
 	//FMemory::Memcpy(realdata.GetData() + 32, (const uint8*)&latitude, sizeof(float));//here is 2 byte valide data length
 	//FMemory::Memcpy(realdata.GetData() + 32+ sizeof(float), (const uint8*)&longitude, sizeof(float));//here is 2 byte valide data length
 
-	TSharedPtr<FJsonObject> newplayerjoin = MakeShareable(new FJsonObject);
-	newplayerjoin->SetNumberField("Command", 1);
-	newplayerjoin->SetNumberField("latitude", latitude);
-	newplayerjoin->SetNumberField("longitude", longitude);
+	TSharedPtr<FJsonObject> locationreport = MakeShareable(new FJsonObject);
+	locationreport->SetNumberField("Command", 1);
+	locationreport->SetNumberField("latitude", latitude);
+	locationreport->SetNumberField("longitude", longitude);
 	//newplayerjoin->SetNumberField("latitude", 30.2345);
 	//newplayerjoin->SetNumberField("longitude", 119.87655);
 	FString OutputString;
 	TSharedRef< TJsonWriter<> > Writer = TJsonWriterFactory<>::Create(&OutputString);
-	FJsonSerializer::Serialize(newplayerjoin.ToSharedRef(), Writer);
+	FJsonSerializer::Serialize(locationreport.ToSharedRef(), Writer);
 	mkcpchannel->send(OutputString);
 
 }

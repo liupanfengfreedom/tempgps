@@ -42,13 +42,19 @@ void APosCharacter::Addkcpchannel(const TSharedPtr<class KcpChannel, ESPMode::Th
 					location.X = (latitude - 3029082)*100;
 					location.Y = (longitude - 11999529)*100;
 					SetActorLocation(location);
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : " + "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : " + "location.X: " + FString::SanitizeFloat(location.X) + "location.Y: " + FString::SanitizeFloat(location.Y));
+				//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : " + "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
+				//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : " + "location.X: " + FString::SanitizeFloat(location.X) + "location.Y: " + FString::SanitizeFloat(location.Y));
 				}
 				);
-
-
-
+		}
+		else if (Command == 3)
+		{
+			AsyncTask(ENamedThreads::GameThread,
+				[this]()
+				{
+					Destroy();
+				}
+			);
 		}
 		});
 }

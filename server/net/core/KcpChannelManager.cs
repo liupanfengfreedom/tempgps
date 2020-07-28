@@ -35,6 +35,7 @@ namespace ChatServer
     }
     class KcpChannel
     {
+        public KcpChannel hostchannel;
         public const int idlength = 32;  
         String channelid;
         public KcpClient mkcpclient;
@@ -97,6 +98,7 @@ namespace ChatServer
                             else
                             {
                                 lastpeopleatrange.Add(p);//new player
+                                p.hostchannel = this;
                                 JObject jObject = new JObject();
                                 jObject.Add("Command", 1);
                                 jObject.Add("channelid", p.channelid);
@@ -139,15 +141,15 @@ namespace ChatServer
             try
             {
                 int Command = (int)jsonstr.GetValue("Command");
-                if (Command==1)
+                if (Command == 1)
                 {
                     float latitude = (float)jsonstr.GetValue("latitude");
                     float longitude = (float)jsonstr.GetValue("longitude");
                     int latitudei = (int)(latitude * 100);//km
                     int longitudei = (int)(longitude * 100);
-                    position temp = new position(latitudei,longitudei);
+                    position temp = new position(latitudei, longitudei);
 
-                    Console.WriteLine("channelid:" + channelid + " latitude: "+ latitude+ " longitude: "+ longitude);
+                    Console.WriteLine("channelid:" + channelid + " latitude: " + latitude + " longitude: " + longitude);
                     bool bcontain = virtualworld.Cells.ContainsKey(temp);
                     if (bcontain)
                     {
@@ -161,7 +163,7 @@ namespace ChatServer
                             position p1 = new position(currentposition.latitude / 1000, currentposition.longitude / 1000);
                             bool bcontain1 = virtualworld.Cells.ContainsKey(p1);
                             if (bcontain1)
-                            { 
+                            {
                                 virtualworld.Cells[p1]?.Remove(this);//remove from last cell
                             }
                         }
@@ -216,7 +218,7 @@ namespace ChatServer
             aTimer = new System.Timers.Timer(1000);
             // Hook up the Elapsed event for the timer. 
             aTimer.Elapsed += (Object source, ElapsedEventArgs e) => {
-                if (timercounter++ > 10)
+                if (timercounter++ > 2)
                 {
                     position p1 = new position(currentposition.latitude / 1000, currentposition.longitude / 1000);
                     bool bcontain1 = virtualworld.Cells.ContainsKey(p1);
@@ -224,10 +226,38 @@ namespace ChatServer
                     {
                         virtualworld.Cells[p1]?.Remove(this);//remove from last cell
                     }
+                    hostchannel?.lastpeopleatrange.Remove(this);
+                    KcpChannelManager.OnchannelReceivedatacallbackmap.Remove(channelid);
+
+                    JObject jObject = new JObject();
+                    jObject.Add("Command", 3);
+                    jObject.Add("channelid", channelid);
+    
+                    hostchannel?.send(jObject.ToString(), channelid);
+                    timercounter = 0;
+                    aTimer.Close();
+                    aTimer.Dispose();
                 }
             };
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
+        }
+        public override bool Equals(Object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                KcpChannel p = (KcpChannel)obj;
+                return (channelid == p.channelid);
+            }
+        }
+        public override int GetHashCode()
+        {
+            return channelid.GetHashCode();
         }
     }
 }

@@ -33,8 +33,11 @@ namespace ChatServer
 
                     }
                     else
-                    { 
-                      KcpChannelManager.OnchannelReceivedatacallbackmap.Add(idstr, new KcpChannel(idstr, this));//need verify
+                    {
+                       // KcpChannelManager.OnchannelReceivedatacallbackmap[idstr].mkcpclient.mremoteEP = mremoteEP;
+
+                        KcpChannelManager.OnchannelReceivedatacallbackmap.Remove(idstr);
+                        KcpChannelManager.OnchannelReceivedatacallbackmap.Add(idstr, new KcpChannel(idstr, this));//need verify
                     }
                 }
                 else
@@ -46,7 +49,7 @@ namespace ChatServer
                 Array.ConstrainedCopy(buffer, KcpChannel.idlength, databuffer, 0, datasize);
                 KcpChannelManager.OnchannelReceivedatacallbackmap[idstr].Onreceivedata(ref databuffer);
 
-
+                #region 
                 //byte[] latitudebuffer = new byte[4];
                 //Array.ConstrainedCopy(buffer, 32, latitudebuffer, 0, 4);
                 //float latitude = ByteArraytoChannelidType.DeSerialize(ref latitudebuffer);
@@ -61,6 +64,7 @@ namespace ChatServer
                 //Console.WriteLine(longitude.ToString());
                 //Console.ForegroundColor = ConsoleColor.White;
                 //userlevelsend(ref buffer);
+                #endregion 
             };
 #endif
             kcphandle handle = new kcphandle();
@@ -115,6 +119,7 @@ namespace ChatServer
                 Console.WriteLine($"kcp send error");
             }
         }
+
     }
     internal class kcphandle : IKcpCallback
     {

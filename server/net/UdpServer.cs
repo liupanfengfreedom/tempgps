@@ -11,7 +11,7 @@ namespace ChatServer
     class UdpServer
     {
         public Socket UdpListener;
-        Dictionary<EndPoint, KcpClient> UdpClientMap ;
+        public Dictionary<EndPoint, KcpClient> UdpClientMap ;
 
         public KcpClient findclient(EndPoint ep)
         {
