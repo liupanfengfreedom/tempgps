@@ -166,7 +166,7 @@ namespace ChatServer
                             }
                         }
                     }
-                    currentposition = new position((int)(latitude * 100000), (int)(longitude * 100000));
+                    currentposition = new position((int)(latitude * 100000), (int)(longitude * 100000));//unit is m
 
                     virtualworld.Cells[temp].Add(this);
                     fleshpotentialsyncell();

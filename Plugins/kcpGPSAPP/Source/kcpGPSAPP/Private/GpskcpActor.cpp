@@ -9,6 +9,7 @@
 #include "JsonUtilities.h"
 #include "Json.h"
 #include "MessageManager.h"
+#include "PosCharacter.h"
 
 // Sets default values
 AGpskcpActor::AGpskcpActor()
@@ -49,22 +50,22 @@ void AGpskcpActor::BeginPlay()
 	//	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, str);
 	//	});
 
-	//bool b = UMobileUtilsBlueprintLibrary::javafunctionIsgpsenabled();
-	//if (b)
-	//{
-	//}
-	//else
-	//{
-	//	UMobileUtilsBlueprintLibrary::javafunctionGotoSettinggps();
-	//}
+	bool b = UMobileUtilsBlueprintLibrary::javafunctionIsgpsenabled();
+	if (b)
+	{
+	}
+	else
+	{
+		UMobileUtilsBlueprintLibrary::javafunctionGotoSettinggps();
+	}
 	int32 id = FMath::Rand();
 	FString androidid = "aassddff1122aaddss"; 
 	androidid = FString::FromInt(id);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "thisid : "+ androidid);
 
-	//androidid = UMobileUtilsBlueprintLibrary::javafunctionAndroidID();
+	androidid = UMobileUtilsBlueprintLibrary::javafunctionAndroidID();
 	mkcpchannel = MakeShareable(new KcpChannel(androidid));
-	mkcpchannel->OnkcpChannelReceivedatadelegate.BindLambda([](const uint8*data, uint32 size) {
+	mkcpchannel->OnkcpChannelReceivedatadelegate.BindLambda([=](const uint8*data, uint32 size) {
 		FString rec = FString(size,(char*)data);
 		TSharedPtr<FJsonObject> jsonobject = MakeShareable(new FJsonObject);
 		TSharedRef< TJsonReader<> > Reader = TJsonReaderFactory<>::Create(rec);
@@ -72,12 +73,28 @@ void AGpskcpActor::BeginPlay()
 		int Command = jsonobject->GetIntegerField("Command");
 		if (Command == 1)//create new player
 		{
-			FString channelid = jsonobject->GetStringField("channelid");
-			float latitude = jsonobject->GetNumberField("latitude");
-			float longitude = jsonobject->GetNumberField("longitude");
+			AsyncTask(ENamedThreads::GameThread,
+				[this, jsonobject]()
+				{
+					FString robotchannelid = jsonobject->GetStringField("channelid");
+					float latitude = jsonobject->GetNumberField("latitude");
+					float longitude = jsonobject->GetNumberField("longitude");
+					latitude -=  3029082;
+					longitude -=  11999529;
+					FVector Location = FVector(latitude*100, longitude*100, 300);
+					FRotator Rotation = FRotator(0, 0, 0);
+					FActorSpawnParameters ActorSpawnParams;
+					ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+					APosCharacter* mcharactor = GetWorld()->SpawnActor<APosCharacter>(Robotclass, Location, Rotation, ActorSpawnParams);
+					mcharactor->SpawnDefaultController();
+					mcharactor->Addkcpchannel(MakeShareable(new KcpChannel(robotchannelid)));
+					GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
+					GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "Location: " + Location.ToString());
+
+				}
+			);
 
 
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : "+ "latitude: "+ FString::SanitizeFloat(latitude)+ "longitude: " + FString::SanitizeFloat(longitude));
 			//create player
 		}
 	});
@@ -101,8 +118,8 @@ void AGpskcpActor::Tick(float DeltaTime)
 
 void AGpskcpActor::timerworker()
 {
-	//float latitude, longitude;
-	//UMobileUtilsBlueprintLibrary::javafunctionGPSInfor(latitude,longitude);
+	float latitude, longitude;
+	UMobileUtilsBlueprintLibrary::javafunctionGPSInfor(latitude,longitude);
 	//FString androidid = UMobileUtilsBlueprintLibrary::javafunctionAndroidID();
 	//TCHAR* serializedChar = androidid.GetCharArray().GetData();
 	//int32 size = FCString::Strlen(serializedChar);
