@@ -19,8 +19,9 @@ APosCharacter::APosCharacter()
 void APosCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 }
+
 void APosCharacter::Addkcpchannel(const TSharedPtr<class KcpChannel, ESPMode::ThreadSafe>&kcpchannelp)
 {
 	mkcpchannel = kcpchannelp;

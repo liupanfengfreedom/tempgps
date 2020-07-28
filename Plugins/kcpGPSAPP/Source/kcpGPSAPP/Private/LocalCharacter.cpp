@@ -60,6 +60,12 @@ void ALocalCharacter::BeginPlay()
 					APosCharacter* mcharactor = GetWorld()->SpawnActor<APosCharacter>(Robotclass, Location, Rotation, ActorSpawnParams);
 					mcharactor->SpawnDefaultController();
 					mcharactor->Addkcpchannel(MakeShareable(new KcpChannel(robotchannelid)));
+					bool b1 = remotecharatermap.Contains(robotchannelid);
+					if (b1)
+					{
+						remotecharatermap[robotchannelid]->Destroy();
+					}
+					remotecharatermap.Add(robotchannelid, mcharactor);
 					//GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
 					GEngine->AddOnScreenDebugMessage(-1, 55.0f, FColor::Yellow, robotchannelid + "  : " + "create new player Location: " + Location.ToString());
 

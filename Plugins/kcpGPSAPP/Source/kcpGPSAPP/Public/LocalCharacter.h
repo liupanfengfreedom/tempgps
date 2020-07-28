@@ -10,9 +10,9 @@ UCLASS()
 class KCPGPSAPP_API ALocalCharacter : public ACharacter
 {
 	GENERATED_BODY()
+		TMap<FString, ACharacter*> remotecharatermap;
 		FTimerHandle th;
 	void timerworker();
-	TArray<uint8> realdata;
 	TSharedPtr<class KcpChannel, ESPMode::ThreadSafe>mkcpchannel;
 	float latitude = 30.29082;
 	float longitude = 119.99529;
