@@ -100,7 +100,12 @@ void ALocalCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ALocalCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	FVector currentlocation = GetActorLocation();
+	if (FVector::Distance(currentlocation, targetlocation) > 100)
+	{
+		AddMovementInput(direction * DeltaTime);
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "addmovement");
+	}
 }
 
 // Called to bind functionality to input
@@ -116,9 +121,10 @@ void ALocalCharacter::timerworker()
 	UMobileUtilsBlueprintLibrary::javafunctionGPSInfor(latitude, longitude);
 
 	FVector location = GetActorLocation();
-	location.X = (latitude * 10000000 - 302908200);
-	location.Y = (longitude * 10000000 - 1199952900);
-	SetActorLocation(location);
+	targetlocation.X = (latitude * 10000000 - 302908200);
+	targetlocation.Y = (longitude * 10000000 - 1199952900);
+	targetlocation.Z = location.Z;
+	direction = targetlocation - location;
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
 
 	//realdata.SetNum(32+(floatsize*2));

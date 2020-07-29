@@ -10,6 +10,8 @@ UCLASS()
 class KCPGPSAPP_API ALocalCharacter : public ACharacter
 {
 	GENERATED_BODY()
+		FVector targetlocation;
+	FVector direction;
 		TMap<FString, ACharacter*> remotecharatermap;
 		FTimerHandle th;
 	void timerworker();

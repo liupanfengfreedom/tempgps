@@ -11,6 +11,8 @@ class KCPGPSAPP_API APosCharacter : public ACharacter
 {
 	GENERATED_BODY()
 		TSharedPtr<class KcpChannel, ESPMode::ThreadSafe>mkcpchannel;
+	FVector targetlocation;
+	FVector direction;
 public:
 	// Sets default values for this character's properties
 	APosCharacter();

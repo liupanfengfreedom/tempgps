@@ -40,9 +40,11 @@ void APosCharacter::Addkcpchannel(const TSharedPtr<class KcpChannel, ESPMode::Th
 				[this,latitude,longitude,channelid]()
 				{
 					FVector location = GetActorLocation();
-					location.X = (latitude - 3029082)*100;
-					location.Y = (longitude - 11999529)*100;
-					SetActorLocation(location);
+					targetlocation.X = (latitude - 3029082)*100;
+					targetlocation.Y = (longitude - 11999529)*100;
+					targetlocation.Z = location.Z;
+					direction = targetlocation - location;
+		
 				//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : " + "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
 				//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, channelid + "  : " + "location.X: " + FString::SanitizeFloat(location.X) + "location.Y: " + FString::SanitizeFloat(location.Y));
 				}
@@ -63,7 +65,13 @@ void APosCharacter::Addkcpchannel(const TSharedPtr<class KcpChannel, ESPMode::Th
 void APosCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	FVector currentlocation = GetActorLocation();
+	if (FVector::Distance(currentlocation, targetlocation) >100)
+	{
+		AddMovementInput(direction * DeltaTime);
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "addmovement");
+	}
+	
 }
 
 // Called to bind functionality to input
