@@ -76,6 +76,7 @@ void ALocalCharacter::BeginPlay()
 			//create player
 		}
 		});
+	setinitialposition();
 	GetWorld()->GetTimerManager().SetTimer(th, this, &ALocalCharacter::timerworker, 1, true, 1);
 	ADDMESSAGELISTEN(this, "1", [=](const void* p) {
 		FString str = *(FString*)p;
@@ -85,6 +86,14 @@ void ALocalCharacter::BeginPlay()
 			FString str = *(FString*)p;
 			longitude = FCString::Atof(*str);
 			})
+}
+void ALocalCharacter::setinitialposition()
+{
+	UMobileUtilsBlueprintLibrary::javafunctionGPSInfor(latitude, longitude);
+	FVector location = GetActorLocation();
+	location.X = (latitude * 10000000 - 302908200);
+	location.Y = (longitude * 10000000 - 1199952900);
+	SetActorLocation(location);
 }
 void ALocalCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
@@ -125,7 +134,7 @@ void ALocalCharacter::timerworker()
 	targetlocation.Y = (longitude * 10000000 - 1199952900);
 	targetlocation.Z = location.Z;
 	direction = targetlocation - location;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "latitude: " + FString::SanitizeFloat(latitude) + "longitude: " + FString::SanitizeFloat(longitude));
 
 	//realdata.SetNum(32+(floatsize*2));
 	//FMemory::Memcpy(realdata.GetData(), (const uint8*)TCHAR_TO_UTF8(serializedChar), size);//here is 2 byte valide data length
