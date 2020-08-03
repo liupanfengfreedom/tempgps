@@ -68,7 +68,8 @@ void APosCharacter::Tick(float DeltaTime)
 	FVector currentlocation = GetActorLocation();
 	if (FVector::Distance(currentlocation, targetlocation) >100)
 	{
-		AddMovementInput(direction * DeltaTime);
+		FVector dir = direction.GetSafeNormal();
+		AddMovementInput(dir * (direction.Size() / 100) * 0.1f);
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "addmovement");
 	}
 	

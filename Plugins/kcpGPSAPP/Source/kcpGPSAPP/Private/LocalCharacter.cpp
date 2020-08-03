@@ -110,9 +110,10 @@ void ALocalCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	FVector currentlocation = GetActorLocation();
-	if (FVector::Distance(currentlocation, targetlocation) > 100)
+	if (FVector::Distance(currentlocation, targetlocation) > 150)
 	{
-		AddMovementInput(direction * DeltaTime);
+		FVector dir = direction.GetSafeNormal();
+		AddMovementInput(dir * (direction.Size()/100)*0.1f);
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "addmovement");
 	}
 }
